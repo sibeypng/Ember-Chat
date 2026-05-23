@@ -22,7 +22,7 @@
       position: relative;
     }
 
-    /* TRANSPARENT BACKGROUND + FIRE EMBERS */
+    /* EMBERS */
     #anime-bg {
       position: fixed;
       top: 0; left: 0;
@@ -32,7 +32,6 @@
       overflow: hidden;
     }
 
-    /* 🔥 Floating Embers */
     .ember {
       position: absolute;
       width: 6px;
@@ -75,7 +74,7 @@
 
     #chat {
       flex: 1;
-      min-height: 0;                    /* ← Important for flex scrolling */
+      min-height: 0;
       overflow-y: auto;
       padding: 15px;
       display: flex;
@@ -98,8 +97,9 @@
       box-shadow: 0 0 20px rgba(212, 175, 119, 0.6);
       animation: dragonPop 0.7s ease forwards;
       overflow: hidden;
-      width: 100%;
+      width: 100%;               /* Full width - consistent size */
       max-width: 100%;
+      align-self: stretch;       /* Forces consistent width */
     }
 
     @keyframes dragonPop {
@@ -169,7 +169,7 @@
 
   <script src="https://cdn.jsdelivr.net/npm/comfy.js@latest/dist/comfy.min.js"></script>
   <script>
-    // ==================== EMBER PARTICLES ====================
+    // EMBER PARTICLES
     const bg = document.getElementById('anime-bg');
 
     function createEmber() {
@@ -189,7 +189,7 @@
     for (let i = 0; i < 28; i++) createEmber();
     setInterval(() => createEmber(), 90);
 
-    // ==================== CHAT ====================
+    // CHAT
     const chatContainer = document.getElementById('chat');
     const statusEl = document.getElementById('status');
     const channel = 'sibeypng';
@@ -203,12 +203,11 @@
       `;
       chatContainer.appendChild(msgDiv);
 
-      // More reliable auto-scroll
+      // Stronger auto-scroll
       setTimeout(() => {
         chatContainer.scrollTop = chatContainer.scrollHeight;
       }, 10);
 
-      // Remove old messages
       if (chatContainer.children.length > 35) {
         chatContainer.removeChild(chatContainer.children[0]);
       }
