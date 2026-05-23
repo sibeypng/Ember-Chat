@@ -75,6 +75,7 @@
 
     #chat {
       flex: 1;
+      min-height: 0;                    /* ← Important for flex scrolling */
       overflow-y: auto;
       padding: 15px;
       display: flex;
@@ -185,12 +186,10 @@
       setTimeout(() => ember.remove(), 40000);
     }
 
-    // Create initial embers
     for (let i = 0; i < 28; i++) createEmber();
-    // Spawn new embers regularly
     setInterval(() => createEmber(), 90);
 
-    // ==================== CHAT FUNCTIONALITY ====================
+    // ==================== CHAT ====================
     const chatContainer = document.getElementById('chat');
     const statusEl = document.getElementById('status');
     const channel = 'sibeypng';
@@ -203,8 +202,13 @@
         <div class="text">${text}</div>
       `;
       chatContainer.appendChild(msgDiv);
-      chatContainer.scrollTop = chatContainer.scrollHeight;
 
+      // More reliable auto-scroll
+      setTimeout(() => {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
+      }, 10);
+
+      // Remove old messages
       if (chatContainer.children.length > 35) {
         chatContainer.removeChild(chatContainer.children[0]);
       }
