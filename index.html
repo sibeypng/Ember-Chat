@@ -91,15 +91,19 @@
     .message {
       position: relative;
       padding: 16px 20px;
-      background: rgba(35, 18, 12, 0.95);
+      background: rgba(35, 18, 12, 0.95);   /* dark background */
       border: none;
       border-radius: 16px;
       box-shadow: 0 0 20px rgba(212, 175, 119, 0.6);
       animation: dragonPop 0.7s ease forwards;
       overflow: hidden;
-      width: 100%;               /* Full width - consistent size */
+      width: 100%;
       max-width: 100%;
-      align-self: stretch;       /* Forces consistent width */
+    }
+
+    .message > * {
+      position: relative;
+      z-index: 2;   /* puts text above fire effect */
     }
 
     @keyframes dragonPop {
@@ -107,6 +111,7 @@
       100% { opacity: 1; transform: translateY(0) scale(1); }
     }
 
+    /* 🔥 Fire swipe - now properly behind the text */
     .message::before {
       content: '';
       position: absolute;
@@ -123,7 +128,7 @@
       z-index: -1;
       animation: fireSwipe 1.8s linear forwards;
       filter: blur(5px);
-      opacity: 0.95;
+      opacity: 0.85;
     }
 
     @keyframes fireSwipe {
@@ -203,7 +208,6 @@
       `;
       chatContainer.appendChild(msgDiv);
 
-      // Stronger auto-scroll
       setTimeout(() => {
         chatContainer.scrollTop = chatContainer.scrollHeight;
       }, 10);
