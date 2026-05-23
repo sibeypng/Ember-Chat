@@ -22,7 +22,33 @@
       position: relative;
     }
 
-    #anime-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: transparent; z-index: -1; overflow: hidden; }
+    /* TRANSPARENT BACKGROUND + FIRE EMBERS */
+    #anime-bg {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: transparent;
+      z-index: -1;
+      overflow: hidden;
+    }
+
+    /* 🔥 Floating Embers */
+    .ember {
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: radial-gradient(circle, #ffdd88, #ff6600, #aa2200);
+      border-radius: 50%;
+      box-shadow: 0 0 8px #ffaa00, 0 0 16px #ff4400, 0 0 24px #ff2200;
+      animation: riseEmbers linear infinite;
+      opacity: 0.85;
+      pointer-events: none;
+    }
+
+    @keyframes riseEmbers {
+      0%   { transform: translateY(110vh) scale(1); }
+      100% { transform: translateY(-120px) scale(0.3); }
+    }
 
     #header {
       flex-shrink: 0;
@@ -31,19 +57,20 @@
       font-size: 26px;
       color: #ffd700;
       text-shadow: 0 0 15px #ff8800, 0 0 25px #8b1e1e;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
       letter-spacing: 4px;
       z-index: 10;
     }
 
     #status {
       text-align: center;
-      font-size: 18px;
-      padding: 10px;
-      margin-bottom: 8px;
+      font-size: 16px;
+      padding: 8px;
+      margin-top: 8px;
       border-radius: 12px;
       background: rgba(0,0,0,0.6);
       z-index: 10;
+      opacity: 0.95;
     }
 
     #chat {
@@ -56,7 +83,8 @@
       background: transparent;
       border: none;
       border-radius: 28px;
-      box-shadow: 0 0 30px rgba(184, 134, 11, 0.4), inset 0 0 60px rgba(139, 30, 30, 0.5);
+      box-shadow: 0 0 30px rgba(184, 134, 11, 0.4),
+                  inset 0 0 60px rgba(139, 30, 30, 0.5);
       z-index: 10;
     }
 
@@ -69,6 +97,8 @@
       box-shadow: 0 0 20px rgba(212, 175, 119, 0.6);
       animation: dragonPop 0.7s ease forwards;
       overflow: hidden;
+      width: 100%;
+      max-width: 100%;
     }
 
     @keyframes dragonPop {
@@ -80,7 +110,13 @@
       content: '';
       position: absolute;
       inset: -4px;
-      background: linear-gradient(90deg, transparent 10%, #ff2200 25%, #ff8800 45%, #ffee66 55%, #ff8800 70%, transparent 90%);
+      background: linear-gradient(90deg, 
+        transparent 10%, 
+        #ff2200 25%, 
+        #ff8800 45%, 
+        #ffee66 55%, 
+        #ff8800 70%, 
+        transparent 90%);
       background-size: 300% 300%;
       border-radius: 20px;
       z-index: -1;
@@ -90,129 +126,110 @@
     }
 
     @keyframes fireSwipe {
-      0% { background-position: 0% 50%; }
+      0%   { background-position: 0% 50%; }
       100% { background-position: 300% 50%; }
     }
 
-    .username { font-family: 'MedievalSharp', cursive; color: #ffeb3b; text-shadow: 0 0 12px #ffeb3b; font-size: 21px; margin-bottom: 6px; }
-    .text { color: #ffffff; font-weight: bold; font-size: 19px; line-height: 1.5; text-shadow: 0 0 8px rgba(255,255,255,0.4); }
-
-    #debug {
-      position: fixed;
-      bottom: 70px;
-      left: 20px;
-      right: 20px;
-      max-height: 180px;
-      background: rgba(0,0,0,0.85);
-      color: #0f0;
-      font-family: monospace;
-      font-size: 13px;
-      padding: 10px;
-      border-radius: 8px;
-      overflow-y: auto;
-      z-index: 200;
-      white-space: pre-wrap;
-      line-height: 1.4;
+    .username {
+      font-family: 'MedievalSharp', cursive;
+      color: #ffeb3b;
+      text-shadow: 0 0 12px #ffeb3b;
+      font-size: 26px;
+      margin-bottom: 8px;
     }
 
-    #test-btn, #reconnect-btn {
-      position: fixed;
-      bottom: 20px;
-      padding: 12px 24px;
-      background: #ff8800;
-      color: #000;
+    .text {
+      color: #ffffff;
       font-weight: bold;
-      border: none;
-      border-radius: 999px;
-      cursor: pointer;
-      box-shadow: 0 0 20px #ff4400;
-      z-index: 100;
+      font-size: 19px;
+      line-height: 1.5;
+      text-shadow: 0 0 8px rgba(255,255,255,0.4);
+      word-break: break-word;
+      overflow-wrap: break-word;
+      white-space: pre-wrap;
     }
-    #test-btn { right: 160px; }
-    #reconnect-btn { right: 20px; }
+
+    #chat::-webkit-scrollbar {
+      width: 12px;
+    }
+    #chat::-webkit-scrollbar-thumb {
+      background: linear-gradient(#d4af77, #b8860b);
+      border-radius: 20px;
+      box-shadow: 0 0 12px #ff8800;
+    }
   </style>
 </head>
 <body>
 
   <div id="anime-bg"></div>
   <div id="header">SIBEY'S ROUND TABLE</div>
-  <div id="status">🔄 Connecting to Twitch chat...</div>
   <div id="chat"></div>
-  <div id="debug">Debug log started...\n</div>
+  <div id="status">🔄 Connecting to Twitch chat...</div>
 
-  <button id="test-btn">🧪 Test Message</button>
-  <button id="reconnect-btn">🔄 Reconnect</button>
-
-  <script src="https://cdn.jsdelivr.net/npm/tmi.js@1.8.5/tmi.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/comfy.js@latest/dist/comfy.min.js"></script>
   <script>
+    // ==================== EMBER PARTICLES ====================
+    const bg = document.getElementById('anime-bg');
+
+    function createEmber() {
+      const ember = document.createElement('div');
+      ember.className = 'ember';
+      const size = Math.random() * 7 + 4;
+      ember.style.width = size + 'px';
+      ember.style.height = size + 'px';
+      ember.style.left = Math.random() * 100 + 'vw';
+      ember.style.animationDuration = (Math.random() * 16 + 12) + 's';
+      ember.style.animationDelay = '-' + Math.random() * 20 + 's';
+      ember.style.opacity = Math.random() * 0.6 + 0.5;
+      bg.appendChild(ember);
+      setTimeout(() => ember.remove(), 40000);
+    }
+
+    // Create initial embers
+    for (let i = 0; i < 28; i++) createEmber();
+    // Spawn new embers regularly
+    setInterval(() => createEmber(), 90);
+
+    // ==================== CHAT FUNCTIONALITY ====================
     const chatContainer = document.getElementById('chat');
     const statusEl = document.getElementById('status');
-    const debugEl = document.getElementById('debug');
     const channel = 'sibeypng';
-    let client;
-
-    function log(msg) {
-      const time = new Date().toLocaleTimeString();
-      debugEl.textContent += `[${time}] ${msg}\n`;
-      debugEl.scrollTop = debugEl.scrollHeight;
-      console.log(msg);
-    }
 
     function addMessage(user, text, color = '#ffd700') {
       const msgDiv = document.createElement('div');
       msgDiv.className = 'message';
-      msgDiv.innerHTML = `<div class="username" style="color: ${color}">${user}</div><div class="text">${text}</div>`;
+      msgDiv.innerHTML = `
+        <div class="username" style="color: ${color}">${user}</div>
+        <div class="text">${text}</div>
+      `;
       chatContainer.appendChild(msgDiv);
       chatContainer.scrollTop = chatContainer.scrollHeight;
-      if (chatContainer.children.length > 35) chatContainer.removeChild(chatContainer.children[0]);
+
+      if (chatContainer.children.length > 35) {
+        chatContainer.removeChild(chatContainer.children[0]);
+      }
     }
 
-    document.getElementById('test-btn').addEventListener('click', () => {
-      addMessage('Test Knight', 'Test message — fire swipe works! 🔥', '#00ff88');
-    });
+    ComfyJS.onMessage = (user, message, flags, self, extra) => {
+      const userColor = extra.userColor || '#ffeb3b';
+      addMessage(user, message, userColor);
+    };
 
-    function connectToTwitch() {
-      if (client) client.disconnect();
-      log('=== NEW CONNECTION ATTEMPT ===');
+    ComfyJS.onChat = (user, message, flags, self, extra) => {
+      const userColor = extra.userColor || '#ffeb3b';
+      addMessage(user, message, userColor);
+    };
 
-      client = new tmi.Client({
-        options: { debug: true },
-        connection: { secure: true, reconnect: true, timeout: 30000 },
-        identity: { username: `justinfan${Math.floor(Math.random()*900000)+100000}` },
-        channels: [channel]
-      });
+    ComfyJS.onConnected = () => {
+      statusEl.innerHTML = '✅ Connected — ready for knights!';
+      statusEl.style.background = 'rgba(0, 255, 100, 0.3)';
+      setTimeout(() => {
+        statusEl.style.transition = 'opacity 1s';
+        statusEl.style.opacity = '0';
+      }, 5000);
+    };
 
-      statusEl.innerHTML = '🔄 Connecting to Twitch chat...';
-      statusEl.style.background = 'rgba(0,0,0,0.6)';
-
-      // Extra detailed event listeners
-      client.on('connecting', () => log('🔄 Connecting event fired'));
-      client.on('connected', (addr, port) => {
-        log(`✅ CONNECTED to ${addr}:${port}`);
-        statusEl.innerHTML = '✅ Connected to Twitch chat — ready for knights!';
-        statusEl.style.background = 'rgba(0, 255, 100, 0.3)';
-        addMessage('System', '🐉 Connected to chat — ready for knights!', '#00ff88');
-      });
-      client.on('disconnected', (reason) => log(`❌ Disconnected: ${reason}`));
-      client.on('error', (err) => log(`❌ ERROR: ${err.message || err}`));
-      client.on('message', (channel, tags, message, self) => {
-        if (self) return;
-        const username = tags['display-name'] || 'Knight';
-        const userColor = tags.color || '#ffeb3b';
-        addMessage(username, message, userColor);
-        log(`📨 Message from ${username}`);
-      });
-
-      client.connect()
-        .then(() => log('connect() promise resolved'))
-        .catch(err => log(`❌ connect() promise rejected: ${err.message || err}`));
-    }
-
-    // Start
-    connectToTwitch();
-
-    // Reconnect button
-    document.getElementById('reconnect-btn').addEventListener('click', connectToTwitch);
+    ComfyJS.Init(channel);
   </script>
 </body>
 </html>
